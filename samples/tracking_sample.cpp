@@ -160,8 +160,8 @@ int main( int argc, char** argv )
 
     imshow( windowName, screenImage );
 
-    // Instantiate Tracker
-    Ptr<Tracker> tracker = create( tracker_algorithm );
+    // Create Tracker
+    Ptr<Tracker> tracker = createTracker(DUMMY);
     if( tracker == NULL )
     {
         cout << "Error: can't create tracker...\n";
@@ -177,15 +177,14 @@ int main( int argc, char** argv )
             if(initialized)
             {
                 cap >> frame;
-                if(frame.empty()){
+                if(frame.empty())
                     break;
-                }
                 frame.copyTo( screenImage );
             }
 
             if( !initialized && isObjectSelected )
             {
-                    //initializes the tracker
+                // Initialize the tracker
                 if( !tracker->init( frame, boundingBox ) )
                 {
                     cout << "***Could not initialize tracker...***\n";
@@ -195,10 +194,11 @@ int main( int argc, char** argv )
             }
             else if( initialized )
             {
-                    //updates the tracker
-                if( tracker->update( frame, boundingBox ) )
+                // Update the tracker with new frame and get new position
+                Rect newPosition;
+                if( tracker->track( frame, newPosition ) )
                 {
-                    rectangle( screenImage, boundingBox, Scalar( 255, 0, 0 ), 2, 1 );
+                    rectangle( screenImage, newPosition, Scalar( 255, 0, 0 ), 2, 1 );
                 }
             }
             imshow( windowName, screenImage );

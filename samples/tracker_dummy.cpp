@@ -1,16 +1,26 @@
 #include <tracker.hpp>
 
-bool Tracker::init( const cv::Mat& image, const cv::Rect& boundingBox )
+class TrackerDummy : public Tracker
 {
+ public:
+    ~TrackerDummy() {}
+    virtual bool init( const cv::Mat& frame, const cv::Rect& initialPosition );
+    virtual bool track( const cv::Mat& frame, cv::Rect& newPosition );
+ private:
+    cv::Rect position_;
+};
 
+bool TrackerDummy::init( const cv::Mat& image, const cv::Rect& initialPosition )
+{
+    position_ = initialPosition;
 }
 
-bool Tracker::update( const cv::Mat& image, cv::Rect& boundingBox )
+bool TrackerDummy::track( const cv::Mat& image, cv::Rect& newPosition )
 {
-
+    newPosition = position_;
 }
 
-cv::Ptr<Tracker> create( const std::string& trackerType )
+cv::Ptr<Tracker> createTrackerDummy()
 {
-    return new Tracker();
+    return cv::Ptr<Tracker>(new TrackerDummy());
 }
