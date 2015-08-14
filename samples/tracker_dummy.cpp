@@ -15,11 +15,13 @@ class TrackerDummy : public Tracker
 bool TrackerDummy::init( const cv::Mat& frame, const cv::Rect& initialPosition )
 {
     position_ = initialPosition;
+	return true;
 }
 
 bool TrackerDummy::track( const cv::Mat& frame, cv::Rect& newPosition )
 {
     newPosition = position_;
+	return true;
 }
 
 cv::Ptr<Tracker> createTrackerDummy()
