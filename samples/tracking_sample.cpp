@@ -1,6 +1,5 @@
 #include <tracker.hpp>
 
-// #include <stdio.h>
 #include <iostream>
 
 #include <opencv2/highgui/highgui.hpp>
@@ -22,22 +21,21 @@ static void onMouse( int event, int x, int y, int, void* )
         switch ( event )
         {
             case EVENT_LBUTTONDOWN:
-                //set origin of the bounding box
+                // Set origin of the bounding box
                 startSelection = true;
                 boundingBox.x = x;
                 boundingBox.y = y;
                 break;
             case EVENT_LBUTTONUP:
-                //set width and height of the bounding box
+                // Set width and height of the bounding box
                 boundingBox.width = std::abs( x - boundingBox.x );
                 boundingBox.height = std::abs( y - boundingBox.y );
-                // paused = false;
                 isObjectSelected = true;
                 break;
             case EVENT_MOUSEMOVE:
               if( startSelection && !isObjectSelected )
               {
-                  //draw the bounding box
+                  // Draw the bounding box
                   Mat currentFrame;
                   screenImage.copyTo( currentFrame );
                   rectangle( currentFrame,
@@ -98,20 +96,20 @@ int main( int argc, char** argv )
         for(size_t npos=0, pos=0, ctr=0; ctr < 4; ctr++)
         {
             npos = initBoundingBox.find_first_of(',', pos);
-            if(npos == string::npos && ctr < 3)
+            if( npos == string::npos && ctr < 3 )
             {
                 break;
             }
 
             int num = atoi(initBoundingBox.substr(pos,(ctr==3)?(string::npos):(npos-pos)).c_str());
-            if(num <= 0)
+            if( num <= 0 )
             {
                 break;
             }
             coords[ctr] = num;
             pos = npos + 1;
         }
-        if(coords[0]>0 && coords[1]>0 && coords[2]>0 && coords[3]>0)
+        if( coords[0]>0 && coords[1]>0 && coords[2]>0 && coords[3]>0 )
         {
             initBoxWasGivenInCommandLine = true;
         }
@@ -144,10 +142,9 @@ int main( int argc, char** argv )
     frame.copyTo( screenImage );
 
     // Init bounding box
-    if(initBoxWasGivenInCommandLine)
+    if( initBoxWasGivenInCommandLine )
     {
         isObjectSelected = true;
-        // paused = false;
         boundingBox.x = coords[0];
         boundingBox.y = coords[1];
         boundingBox.width  = std::abs( coords[2] - coords[0] );
@@ -170,48 +167,40 @@ int main( int argc, char** argv )
 
     // Main loop of the application
     bool initialized = false;
-    for ( ;; )
+    for(;;)
     {
-        // if( !paused )
+        if( initialized )
         {
-            if(initialized)
-            {
-                cap >> frame;
-                if(frame.empty())
-                    break;
-                frame.copyTo( screenImage );
-            }
-
-            if( !initialized && isObjectSelected )
-            {
-                // Initialize the tracker
-                if( !tracker->init( frame, boundingBox ) )
-                {
-                    cout << "***Could not initialize tracker...***\n";
-                    return -1;
-                }
-                initialized = true;
-            }
-            else if( initialized )
-            {
-                // Update the tracker with new frame and get new position
-                Rect newPosition;
-                if( tracker->track( frame, newPosition ) )
-                {
-                    rectangle( screenImage, newPosition, Scalar( 255, 0, 0 ), 2, 1 );
-                }
-            }
-            imshow( windowName, screenImage );
+            cap >> frame;
+            if(frame.empty())
+                break;
+            frame.copyTo( screenImage );
         }
 
-        char c = (char) waitKey( 2 );
-        if( c == 27 ) // Esc
-            break;
-        if( c == 'q' )
-            break;
-        // if( c == 'p' )
-        //     paused = !paused;
+        if( !initialized && isObjectSelected )
+        {
+            // Initialize the tracker
+            if( !tracker->init( frame, boundingBox ) )
+            {
+                cout << "***Could not initialize tracker...***\n";
+                return -1;
+            }
+            initialized = true;
+        }
+        else if( initialized )
+        {
+            // Update the tracker with new frame and get new position
+            Rect newPosition;
+            if( tracker->track( frame, newPosition ) )
+            {
+                rectangle( screenImage, newPosition, Scalar( 255, 0, 0 ), 2, 1 );
+            }
+        }
+        imshow( windowName, screenImage );
 
+        char key = waitKey( 2 );
+        if( key == 'q' || key == 27 ) // Esc
+            break;
     }
 
     return 0;

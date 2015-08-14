@@ -3,19 +3,21 @@
 class TrackerDummy : public Tracker
 {
  public:
-    ~TrackerDummy() {}
+    virtual ~TrackerDummy() {}
+
     virtual bool init( const cv::Mat& frame, const cv::Rect& initialPosition );
     virtual bool track( const cv::Mat& frame, cv::Rect& newPosition );
+
  private:
     cv::Rect position_;
 };
 
-bool TrackerDummy::init( const cv::Mat& image, const cv::Rect& initialPosition )
+bool TrackerDummy::init( const cv::Mat& frame, const cv::Rect& initialPosition )
 {
     position_ = initialPosition;
 }
 
-bool TrackerDummy::track( const cv::Mat& image, cv::Rect& newPosition )
+bool TrackerDummy::track( const cv::Mat& frame, cv::Rect& newPosition )
 {
     newPosition = position_;
 }
