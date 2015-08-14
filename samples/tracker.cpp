@@ -137,8 +137,9 @@ int main( int argc, char** argv )
 
   Mat frame;
   paused = true;
-  namedWindow( "Tracking API", 1 );
-  setMouseCallback( "Tracking Sample", onMouse, 0 );
+  std::string windowName = "Tracking API";
+  namedWindow( windowName, 1 );
+  setMouseCallback( windowName, onMouse, 0 );
 
     //instantiates the specific Tracker
   Ptr<Tracker> tracker = create( tracker_algorithm );
@@ -161,7 +162,7 @@ int main( int argc, char** argv )
     printf("bounding box with vertices (%d,%d) and (%d,%d) was given in command line\n",coords[0],coords[1],coords[2],coords[3]);
     rectangle( image, boundingBox, Scalar( 255, 0, 0 ), 2, 1 );
   }
-  imshow( "Tracking API", image );
+  imshow( windowName, image );
 
   bool initialized = false;
   int frameCounter = 0;
@@ -196,11 +197,13 @@ int main( int argc, char** argv )
           rectangle( image, boundingBox, Scalar( 255, 0, 0 ), 2, 1 );
         }
       }
-      imshow( "Tracking API", image );
+      imshow( windowName, image );
       frameCounter++;
     }
 
     char c = (char) waitKey( 2 );
+    if( c == 27 ) // Esc
+      break;
     if( c == 'q' )
       break;
     if( c == 'p' )
