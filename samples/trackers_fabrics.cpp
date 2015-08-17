@@ -1,18 +1,16 @@
 #include "tracker.hpp"
 
 cv::Ptr<Tracker> createTrackerDummy();
-// Declare your implementation here
+// TODO: Declare your implementation here
 // cv::Ptr<Tracker> createTrackerYourName();
 
-cv::Ptr<Tracker> createTracker(TRACKER_IMPLEMENTATIONS impl)
+cv::Ptr<Tracker> createTracker(const std::string &impl_name)
 {
-    switch (impl) {
-        case DUMMY:
-            return createTrackerDummy();
-        // Add case for your implementation
-        // case YOUR_NAME:
-        //     return createTrackerYourName();
-        default:
-            return 0;
-    }
+    if (impl_name == "dummy")
+        return createTrackerDummy();
+    // TODO: Add case for your implementation
+    // else if (impl_name == "your_name"):
+    //     return createTrackerYourName();
+
+    return 0;
 }

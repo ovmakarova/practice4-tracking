@@ -60,12 +60,11 @@ int main( int argc, char** argv )
     cv::Rect bounding_box = gui.initBoundingBox(parser.get<std::string>("3"), frame);
 
     // Create Tracker
-    cv::Ptr<Tracker> tracker = createTracker(DUMMY); // TODO: choose tracker based
-    // on provided option
+    cv::Ptr<Tracker> tracker = createTracker(tracker_algorithm);
 
     if (tracker == NULL)
     {
-        std::cout << "Error: can't create tracker...\n" << std::endl;
+        std::cout << "Error: can't create tracker \"" << tracker_algorithm << "\"" << std::endl;
         return 1;
     }
 
