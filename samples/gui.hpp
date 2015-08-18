@@ -28,33 +28,20 @@ public:
         cv::destroyWindow(window_name_);
     }
 
-    cv::Rect initBoundingBox(std::string init_string,
+    cv::Rect initBoundingBox(const cv::Rect &bounding_box,
                              const cv::Mat &init_image)
     {
-        // Parse init_string
-        std::replace(init_string.begin(), init_string.end(), ',', ' ');
-        std::istringstream init_stream(init_string);
-        std::vector<int> coords(4, 0);
-        bool valid = true;
-        for (size_t i = 0; i < coords.size(); i++)
-            init_stream >> coords[i];
-
-        // Validate coordinates
-        if (coords[0] <= 0 || coords[1] <= 0 || coords[2] <= 0 || coords[3] <= 0 ||
-            coords[0] >= init_image.cols || coords[2] >= init_image.cols ||
-            coords[1] >= init_image.rows || coords[3] >= init_image.rows)
-            valid = false;
-
-        if (valid)
+        if (bounding_box != cv::Rect() &&
+            (bounding_box & cv::Rect(0, 0, init_image.cols, init_image.rows)) == bounding_box)
         {
-            bounding_box_ = cv::Rect(cv::Point(coords[0], coords[1]),
-                                     cv::Point(coords[2], coords[3]));
+            // if provided rect is valid, save it
+
+            bounding_box_ = bounding_box;
             object_selected_ = true;
         }
         else
         {
-            // ask user to draw the bounding box if init_string doesn't provide
-            // a valid one
+            // otherwise, ask user to draw the bounding box
 
             bounding_box_ = cv::Rect();
 
@@ -72,10 +59,15 @@ public:
         return bounding_box_;
     }
 
-    bool displayImage(const cv::Mat &image, const cv::Rect &rect)
+    bool displayImage(const cv::Mat &image,
+                      const cv::Rect &rect,
+                      const cv::Rect &gt = cv::Rect(),
+                      const cv::Scalar &rect_color = cv::Scalar( 0, 255, 0 ))
     {
         image.copyTo(display_image_);
-        cv::rectangle(display_image_, rect, cv::Scalar( 255, 0, 0 ), 2, 1);
+        if (gt != cv::Rect())
+            cv::rectangle(display_image_, gt, cv::Scalar( 255, 0, 0 ), 2, 1);
+        cv::rectangle(display_image_, rect, rect_color, 2, 1);
         cv::imshow(window_name_, display_image_);
         char c = cv::waitKey(30) & 0xFF;
         if (c == 27) // ESC

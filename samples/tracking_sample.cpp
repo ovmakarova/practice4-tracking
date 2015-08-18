@@ -2,6 +2,43 @@
 #include "gui.hpp"
 
 #include <iostream>
+#include <fstream>
+
+bool exists(const std::string &filename)
+{
+    std::ifstream infile(filename.c_str());
+    bool ret = infile.good();
+    infile.close();
+    return ret;
+}
+
+cv::Rect parseRect(std::string rep)
+{
+    std::replace(rep.begin(), rep.end(), ',', ' ');
+    std::istringstream init_stream(rep);
+    std::vector<float> coords(4, 0.0f);
+    for (size_t i = 0; i < coords.size(); i++)
+        init_stream >> coords[i];
+
+    return cv::Rect(cv::Point(coords[0] + 0.5, coords[1] + 0.5),
+                    cv::Point(coords[2] + 0.5, coords[3] + 0.5));
+}
+
+float overlap(const cv::Rect &guess, const cv::Rect &gt)
+{
+    if (guess == cv::Rect() && gt == cv::Rect())
+        return 1.0f;
+
+    cv::Rect intersection = guess & gt;
+    if (intersection == cv::Rect())
+        return 0.0f;
+
+    float div = guess.area() + gt.area() - intersection.area();
+    if (div > 0.0f)
+        return intersection.area() / div;
+    else
+        return 0.0f;
+}
 
 void help(const char *argv0)
 {
@@ -57,7 +94,20 @@ int main( int argc, char** argv )
 
     // Initialize GUI
     GUI gui;
-    cv::Rect bounding_box = gui.initBoundingBox(parser.get<std::string>("3"), frame);
+    std::string argv3 = parser.get<std::string>("3");
+    std::string bounding_box_string;
+    cv::Rect bounding_box;
+    std::ifstream gt_file;
+    if (exists(argv3))
+    {
+        gt_file.open(argv3.c_str(), std::ifstream::in);
+        std::getline(gt_file, bounding_box_string);
+        bounding_box = parseRect(bounding_box_string);
+    }
+    else
+    {
+        bounding_box = gui.initBoundingBox(parseRect(argv3), frame);
+    }
 
     // Create Tracker
     cv::Ptr<Tracker> tracker = createTracker(tracker_algorithm);
@@ -75,6 +125,9 @@ int main( int argc, char** argv )
     }
 
     // Run tracking
+    int num_correct = 0;
+    int num_responses = 0;
+    int num_objects = 0;
     while (true)
     {
         cap >> frame;
@@ -83,9 +136,34 @@ int main( int argc, char** argv )
 
         cv::Rect position;
         bool found = tracker->track(frame, position);
-        if (!gui.displayImage(frame, found ? position : cv::Rect()))
+
+        cv::Scalar rect_color = cv::Scalar(0, 255, 0);
+        if (gt_file.is_open())
+        {
+            std::getline(gt_file, bounding_box_string);
+            bounding_box = parseRect(bounding_box_string);
+
+            if (found)
+                num_responses++;
+
+            if (bounding_box != cv::Rect())
+                num_objects++;
+
+            if (overlap(position, bounding_box) >= 0.25)
+                num_correct++;
+            else
+                rect_color = cv::Scalar(0, 0, 255);
+        }
+
+        if (!gui.displayImage(frame,
+                              found ? position : cv::Rect(),
+                              gt_file.is_open() ? bounding_box : cv::Rect(),
+                              rect_color))
             break;
     }
+
+    std::cout << "Precision:\t" << num_correct / (float)num_responses << std::endl;
+    std::cout << "Recall   :\t" << num_correct / (float)num_objects << std::endl;
 
     return 0;
 }
