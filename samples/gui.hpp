@@ -61,8 +61,9 @@ public:
 
     bool displayImage(const cv::Mat &image,
                       const cv::Rect &rect,
-                      const cv::Rect &gt = cv::Rect(),
-                      const cv::Scalar &rect_color = cv::Scalar( 0, 255, 0 ))
+                      const cv::Scalar &rect_color = cv::Scalar( 0, 255, 0 ),
+                      const cv::Rect &gt = cv::Rect()
+        )
     {
         image.copyTo(display_image_);
         if (gt != cv::Rect())
