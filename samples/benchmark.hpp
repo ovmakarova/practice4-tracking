@@ -21,6 +21,14 @@ inline float overlap(const cv::Rect &guess, const cv::Rect &gt)
         return 0.0f;
 }
 
+template<typename T> 
+bool isfinite(T arg)
+{
+    return arg == arg && 
+           arg != std::numeric_limits<T>::infinity() &&
+           arg != -std::numeric_limits<T>::infinity();
+}
+
 inline cv::Rect parseRect(std::string rep)
 {
     std::replace(rep.begin(), rep.end(), ',', ' ');
@@ -29,7 +37,7 @@ inline cv::Rect parseRect(std::string rep)
     for (size_t i = 0; i < coords.size(); i++)
     {
         init_stream >> coords[i];
-        if (!std::isfinite(coords[i]))
+        if (!isfinite(coords[i]))
             coords[i] = 0.0f;
     }
 
