@@ -5,22 +5,22 @@ class TrackerDummy : public Tracker
  public:
     virtual ~TrackerDummy() {}
 
-    virtual bool init( const cv::Mat& frame, const cv::Rect& initialPosition );
-    virtual bool track( const cv::Mat& frame, cv::Rect& newPosition );
+    virtual bool init( const cv::Mat& frame, const cv::Rect& initial_position );
+    virtual bool track( const cv::Mat& frame, cv::Rect& new_position );
 
  private:
     cv::Rect position_;
 };
 
-bool TrackerDummy::init( const cv::Mat& frame, const cv::Rect& initialPosition )
+bool TrackerDummy::init( const cv::Mat& frame, const cv::Rect& initial_position )
 {
-    position_ = initialPosition;
+    position_ = initial_position;
 	return true;
 }
 
-bool TrackerDummy::track( const cv::Mat& frame, cv::Rect& newPosition )
+bool TrackerDummy::track( const cv::Mat& frame, cv::Rect& new_position )
 {
-    newPosition = position_;
+    new_position = position_;
 	return true;
 }
 
