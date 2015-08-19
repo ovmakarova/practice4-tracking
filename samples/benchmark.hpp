@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <cmath>
 #include <opencv2/core/core.hpp>
 
 inline float overlap(const cv::Rect &guess, const cv::Rect &gt)
@@ -26,7 +27,11 @@ inline cv::Rect parseRect(std::string rep)
     std::istringstream init_stream(rep);
     std::vector<float> coords(4, 0.0f);
     for (size_t i = 0; i < coords.size(); i++)
+    {
         init_stream >> coords[i];
+        if (!std::isfinite(coords[i]))
+            coords[i] = 0.0f;
+    }
 
     return cv::Rect(cv::Point(coords[0] + 0.5, coords[1] + 0.5),
                     cv::Point(coords[2] + 0.5, coords[3] + 0.5));

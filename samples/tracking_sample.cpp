@@ -10,10 +10,17 @@ void help(const char *argv0)
     std::cout <<
         "Usage:\n"
         << argv0 <<
-        " <tracker_algorithm> <video_name> <bounding box>\n"
-        "\nVideo examples can be found in opencv_extra/testdata/cv/tracking/\n"
+        " <tracker_algorithm> <video_name> <bounding_box or path_to_gt_file>\n"
+        "\nVideo examples can be found in \"dataset\" folder\n"
         "\nBounding box should be given in format \"x1,y1,x2,y2\",\n"
-        "where x's and y's are integer cordinates of opposed corners of bounding box"
+        "where x's and y's are integer cordinates of opposed corners of bounding box\n"
+        "\nGround truth files are text files where each line is the representation\n"
+        "of a bounding box in the described format. Examples can also be found \n"
+        "in the\"dataset\" folder.\n\n"
+        "Examples:\n\n"
+        "$ ./bin/tracking_sample dummy ../dataset/car.mp4\n\n"
+        "$ ./bin/tracking_sample dummy ../dataset/car.mp4 142,125,232,164\n\n"
+        "$ ./bin/tracking_sample dummy ../dataset/car.mp4 ../dataset/car.txt\n\n"
               << std::endl;
 }
 
