@@ -81,7 +81,7 @@ __Дополнительные задачи__:
      2. Можно также передать 2 параметра так, как показано ниже. 
 
   ```bash
-     tracking_sample.exe dummy ../../dataset/car.mp4
+     $ tracking_sample.exe dummy ../../dataset/car.mp4
   ```
 
         Тогда откроется окно, в котором нужно будет мышью выбрать объект
@@ -90,7 +90,7 @@ __Дополнительные задачи__:
      3. Можно передать 3 параметра так, как показано ниже.
 
      ```bash
-     tracking_sample.exe dummy ../../dataset/car.mp4 ../../dataset/car.txt
+     $ tracking_sample.exe dummy ../../dataset/car.mp4 ../../dataset/car.txt
      ```
 
         Тогда, кроме результатов указанного трекера, будет показан
