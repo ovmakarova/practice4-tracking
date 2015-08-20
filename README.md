@@ -78,6 +78,32 @@ __Дополнительные задачи__:
   3. Запустить `tracking_sample.exe` для получения справки и разобраться с
      параметрами его запуска.
      1. Приложение можно запускать без параметров - тогда оно просто выдает справку.
+
+     ```bash
+     Tracker algorithm:
+     Video name:
+     Error: can't recognize tracking algorithm or open video
+     Usage:
+     tracking_sample.exe <tracker_algorithm> <video_name> <bounding_box or path_to_gt_file>
+
+     Video examples can be found in "dataset" folder
+
+     Bounding box should be given in format "x1,y1,x2,y2",
+     where x's and y's are integer cordinates of opposed corners of bounding box
+
+     Ground truth files are text files where each line is the representation
+     of a bounding box in the described format. Examples can also be found
+     in the"dataset" folder.
+
+     Examples:
+
+     $ ./bin/tracking_sample dummy ../dataset/car.mp4
+
+     $ ./bin/tracking_sample dummy ../dataset/car.mp4 142,125,232,164
+
+     $ ./bin/tracking_sample dummy ../dataset/car.mp4 ../dataset/car.txt
+     ```
+
      2. Можно также передать 2 параметра так, как показано ниже. В
         результате откроется окно, в котором нужно будет мышью выбрать
         объект для трекинга. После чего будет показан результат трекинга
