@@ -41,7 +41,7 @@ __Дополнительные задачи__:
        среднее и т.п.).
      - Оценка масштаба.
      - Использование различных особых точек (Harris corners,
-       goodFeaturesToTrack, SIFT/SURF/ORB features и т.п.).
+       `goodFeaturesToTrack`, SIFT/SURF/ORB features и т.п.).
      - Детектировать срыв трекинга.
 
 ## Общая последовательность действий
