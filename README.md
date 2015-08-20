@@ -167,7 +167,7 @@ __Дополнительные задачи__:
      }
      ```
 
-     5. Добавить свою объвление функции `createTrackerYourName` в файл
+     5. Добавить объвление своей функции `createTrackerYourName` в файл
         `trackers_factory.cpp`.
 
      ```cpp
