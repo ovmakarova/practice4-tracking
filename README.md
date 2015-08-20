@@ -124,12 +124,67 @@ __Дополнительные задачи__:
 
   4. Добавить новую реализацию интерфейса `Tracker`.
      1. Добавить новый файл с расширением `.cpp` в директорию `samples`
-        (например, `tracker_median_flow.cpp`).
+        (например, `tracker_median_flow_YOUR_NAME.cpp`).
      2. Перезапустить CMake, чтобы он "подхватил" созданный файл.
      3. Реализовать в созданном файле интерфейс `Tracker`, аналогично реализации
         в файле `tracker_dummy.cpp`. Тела методов могут быть пока тривиальными.
-     4. Добавить свою реализацию в функцию-фабрику `createTracker` в файле
+
+     ```cpp
+     #include <tracker.hpp>
+
+     class TrackerYourName : public Tracker
+     {
+     public:
+         virtual ~TrackerYourName() {}
+
+         virtual bool init( const cv::Mat& frame, const cv::Rect& initial_position );
+         virtual bool track( const cv::Mat& frame, cv::Rect& new_position );
+
+     private:
+         cv::Rect position_;
+     };
+
+     bool TrackerYourName::init( const cv::Mat& frame, const cv::Rect& initial_position )
+     {
+         position_ = initial_position;
+         return true;
+     }
+
+     bool TrackerYourName::track( const cv::Mat& frame, cv::Rect& new_position )
+     {
+         new_position = position_;
+         return true;
+     }
+     ```
+
+     4. В тот же файл после объявления класса необходимо поместить функцию создания
+        собственного трекера
+
+     ```cpp
+     cv::Ptr<Tracker> createTrackerYourName()
+     {
+         return cv::Ptr<Tracker>(new TrackerYourName());
+     }
+     ```
+
+     5. Добавить свою объвление функции `createTrackerYourName` в файл
         `trackers_factory.cpp`.
+
+     ```cpp
+     cv::Ptr<Tracker> createTrackerYourName();
+     ```
+
+     6. Вызов реализации полученной функции-фабрики необходимо поместить
+        в функцию `createTracker` (файл `trackers_factory.cpp`), добавив
+        дополнительную ветку в операторе условия.
+
+     ```cpp
+     if (impl_name == "dummy")
+        return createTrackerDummy();
+     else if (impl_name == "your_name"):
+        return createTrackerYourName();
+     ```
+
   5. Реализовать примитивную версию алгоритма Median Flow. Метод `track` в
      созданной реализации должен содержать:
      1. Выбор точек в прямоугольнике.
