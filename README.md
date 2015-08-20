@@ -192,9 +192,9 @@ __Дополнительные задачи__:
      созданной реализации должен содержать:
      1. Выбрать точки для сопровождения в прямоугольнике.
      2. Вычислить для них optical flow (следует использовать функцию 
-        `calcOpticalFlowPyrLK`, она возвращает статус точки (потерена
-        или нет) и ошибку) и отфильтровать "плохие" точки. Фильтрация "плохих"
-        точек осуществляется следующим образом:
+        `calcOpticalFlowPyrLK`, [пример использования][lucas-canade-tutorial])
+        и отфильтровать "плохие" точки. Фильтрация "плохих" точек
+        осуществляется следующим образом:
         1. Выбрать медианную ошибку.
         2. Назначить "плохими" все точки, для которых ошибка больше медианной.
      3. Выбрать медианные смещения по X и по Y.
@@ -229,3 +229,4 @@ __Дополнительные задачи__:
 [git-intro]: https://github.com/Itseez-NNSU-SummerSchool2015/practice1-devtools#Общие-инструкции-по-работе-с-git
 [cmake-msvs]: https://github.com/Itseez-NNSU-SummerSchool2015/practice1-devtools#Сборка-проекта-с-помощью-cmake-и-microsoft-visual-studio
 [tasks]: https://github.com/Itseez-NNSU-SummerSchool2015/practice4-tracking#Задачи
+[lucas-canade-tutorial]: http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_video/py_lucas_kanade/py_lucas_kanade.html
