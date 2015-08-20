@@ -79,7 +79,7 @@ __Дополнительные задачи__:
      параметрами его запуска.
      1. Приложение можно запускать без параметров - тогда оно просто выдает справку.
 
-     ```bash
+     ```txt
      Tracker algorithm:
      Video name:
      Error: can't recognize tracking algorithm or open video
